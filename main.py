@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtChart
 from scipy.integrate import *
 import numpy as np
 
+
 class UiForm(object):
     def __init__(self):
         self.r = QtWidgets.QDoubleSpinBox(Form)
@@ -131,16 +132,16 @@ class UiForm(object):
         self.ring_series.clear()
         self.axis_series.clear()
         self.dot_series.clear()
-        dx = 2 * self.r.value() * self.dest
+        c = 2 * (self.R.value() + self.r.value())  # доп длина веревки чтобы на графике смотрелось красиво
         dy = self.L.value() - y
-        self.rope_series.append(0, self.L.value())
-        self.rope_series.append(0, dy)
+        self.rope_series.append(0, self.L.value() + c)
+        self.rope_series.append(2 * self.r.value() * self.dest, dy)
 
         for i in np.arange(-np.pi - 0.1, np.pi, 0.1):
-            self.ring_series.append(dx + 2 * self.R.value() * np.cos(i), 2 * self.R.value() * np.sin(i) + dy)
-            self.axis_series.append(dx + 2 * self.r.value() * np.cos(i), 2 * self.r.value() * np.sin(i) + dy)
-        self.dot_series.append(dx + 2 * self.R.value() * np.cos(-fi), 2 * self.R.value() * np.sin(-fi) + dy)
-        self.dot_series.append(dx + 2 * self.r.value() * np.cos(-fi), 2 * self.r.value() * np.sin(-fi) + dy)
+            self.ring_series.append(2 * self.R.value() * np.cos(i), 2 * self.R.value() * np.sin(i) + dy)
+            self.axis_series.append(2 * self.r.value() * np.cos(i), 2 * self.r.value() * np.sin(i) + dy)
+        self.dot_series.append(2 * self.R.value() * np.cos(fi), 2 * self.R.value() * np.sin(fi) + dy)
+        self.dot_series.append(2 * self.r.value() * np.cos(fi), 2 * self.r.value() * np.sin(fi) + dy)
 
     def on_r_editing_finished(self):
         if self.r.value() > self.R.value():
